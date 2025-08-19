@@ -9,9 +9,39 @@
     {% block styles %}{% endblock %}
 </head>
 <body>
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/home">JS Games</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/play/spelling-bee">Spelling Bee</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Wordle</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Soduku</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Countdown</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
     {% block content %}{% endblock %}
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     {% block scripts %}{% endblock %}
 </body>
+</html>

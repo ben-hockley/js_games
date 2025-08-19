@@ -154,9 +154,7 @@ function setupInputHandlers() {
 
 // Call setupInputHandlers after DOM is loaded and after each new game/shuffle
 document.addEventListener('DOMContentLoaded', function () {
-    setupInputHandlers();
-    // Start a new game on load
-    startNewGame();
+    startNewGame(); // Start a new game on load
 });
 
 // Re-setup handlers after new game or shuffle (since hexagons are re-rendered)
