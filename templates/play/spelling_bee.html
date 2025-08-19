@@ -10,50 +10,56 @@
 <div class="container my-4">
   <div class="row">
     <div class="col-12 col-lg-6 mb-4">
-      <div class="p-4 border rounded h-100 bg-light">
+      <div class="p-4 border rounded h-100 bg-light d-flex flex-column justify-content-between" style="min-height: 100%;">
         <!-- 5x3 Bootstrap Grid (no borders) -->
-        <div class="container">
-          <div class="row">
-            <div class="col text-center"></div>
-            <div class="col text-center">
-                <div class="hexagon-outer">A</div>
+        <div>
+          <div class="container">
+            <div class="row">
+              <div class="col text-center"></div>
+              <div class="col text-center">
+                  <div class="hexagon-outer">A</div>
+              </div>
+              <div class="col text-center"></div>
             </div>
-            <div class="col text-center"></div>
-          </div>
-          <div class="row">
-            <div class="col text-center">
-                <div class="hexagon-outer">B</div>
+            <div class="row">
+              <div class="col text-center">
+                  <div class="hexagon-outer">B</div>
+              </div>
+              <div class="col text-center"></div>
+              <div class="col text-center">
+                  <div class="hexagon-outer">C</div>
+              </div>
             </div>
-            <div class="col text-center"></div>
-            <div class="col text-center">
-                <div class="hexagon-outer">C</div>
+            <div class="row">
+              <div class="col text-center"></div>
+              <div class="col text-center">
+                  <div class="hexagon-center">D</div>
+              </div>
+              <div class="col text-center"></div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col text-center"></div>
-            <div class="col text-center">
-                <div class="hexagon-center">D</div>
+            <div class="row">
+              <div class="col text-center">
+                  <div class="hexagon-outer">E</div>
+              </div>
+              <div class="col text-center"></div>
+              <div class="col text-center">
+                  <div class="hexagon-outer">F</div>
+              </div>
             </div>
-            <div class="col text-center"></div>
-          </div>
-          <div class="row">
-            <div class="col text-center">
-                <div class="hexagon-outer">E</div>
+            <div class="row">
+              <div class="col text-center"></div>
+              <div class="col text-center">
+                  <div class="hexagon-outer">G</div>
+              </div>
+              <div class="col text-center"></div>
             </div>
-            <div class="col text-center"></div>
-            <div class="col text-center">
-                <div class="hexagon-outer">F</div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col text-center"></div>
-            <div class="col text-center">
-                <div class="hexagon-outer">G</div>
-            </div>
-            <div class="col text-center"></div>
           </div>
         </div>
         <!-- End 5x3 Grid -->
+        <div class="mt-4 d-flex justify-content-center gap-3">
+          <button type="button" class="btn btn-primary" onclick="startNewGame()">New Game</button>
+          <button type="button" class="btn btn-secondary" onclick="shuffleGrid()">Shuffle</button>
+        </div>
       </div>
     </div>
     <div class="col-12 col-lg-6 mb-4">
