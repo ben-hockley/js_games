@@ -53,13 +53,11 @@ function startNewGame() {
     validWords = findValidWords(randomLetters, randomLetters[0], window.englishWords);
     wordsFound = [];
 
-    console.log("Letter set (First Letter is the Center Letter)")
-    console.log(randomLetters);
-    console.log("Valid Words:")
-    console.log(validWords);
-
     document.getElementById("words-findable").textContent = validWords.length;
     document.getElementById("words-found").textContent = wordsFound.length;
+
+    // Reset the words found list in the DOM
+    updateWordsList();
 }
 
 function shuffleGrid() {
@@ -87,7 +85,87 @@ function findValidWords(letters, centerLetter, dictionary) {
     });
 }
 
+function handleWordSubmit() {
+    const input = document.getElementById('current-word-input');
+    const word = input.value.trim().toLowerCase();
+    let message = '';
+    if (!word) {
+        input.value = '';
+        return;
+    }
+    if (validWords && validWords.includes(word)) {
+        if (wordsFound && wordsFound.includes(word)) {
+            message = "This word has already been found";
+        } else {
+            wordsFound.push(word);
+            document.getElementById("words-found").textContent = wordsFound.length;
+            updateWordsList(); // Update the DOM list
+            message = "New word!";
+        }
+    } else {
+        message = "Word not found";
+    }
+    alert(message);
+    input.value = '';
+}
 
-// Example usage:
-// let validWords = findValidWords(randomLetters, randomLetters[0], englishWords);
-// console.log(validWords);
+// Update the words found list in the DOM
+function updateWordsList() {
+    const ul = document.getElementById('words-list');
+    if (!ul) return;
+    ul.innerHTML = '';
+    wordsFound.forEach(word => {
+        const li = document.createElement('li');
+        li.textContent = word;
+        ul.appendChild(li);
+    });
+}
+
+function setupInputHandlers() {
+    const input = document.getElementById('current-word-input');
+    input.value = '';
+
+    // Click on hexagons
+    document.querySelectorAll('.hexagon-center, .hexagon-outer').forEach(hex => {
+        hex.onclick = function () {
+            input.value += hex.textContent.trim();
+        };
+    });
+
+    // Submit button
+    const submitBtn = document.getElementById('submit-word-btn');
+    if (submitBtn) {
+        submitBtn.onclick = handleWordSubmit;
+    }
+
+    // Clear button
+    const clearBtn = document.getElementById('clear-word-btn');
+    if (clearBtn) {
+        clearBtn.onclick = function() {
+            document.getElementById('current-word-input').value = '';
+        };
+    }
+}
+
+// Call setupInputHandlers after DOM is loaded and after each new game/shuffle
+document.addEventListener('DOMContentLoaded', function () {
+    setupInputHandlers();
+    // Start a new game on load
+    startNewGame();
+});
+
+// Re-setup handlers after new game or shuffle (since hexagons are re-rendered)
+function setRandomGrid() {
+    // Set center hexagon to first letter
+    const centerHex = document.querySelector('.hexagon-center');
+    if (centerHex) {
+        centerHex.textContent = randomLetters[0] || '';
+    }
+    // Set outer hexagons to the rest
+    const outerHexes = document.querySelectorAll('.hexagon-outer');
+    outerHexes.forEach((hex, index) => {
+        hex.textContent = randomLetters[index + 1] || '';
+    });
+    // Set up input handlers again
+    setupInputHandlers();
+}

@@ -11,8 +11,19 @@
   <div class="row">
     <div class="col-12 col-lg-6 mb-4">
       <div class="p-4 border rounded h-100 bg-light d-flex flex-column justify-content-between" style="min-height: 100%;">
-        <!-- 5x3 Bootstrap Grid (no borders) -->
+        <!-- Word input area with clear and submit buttons -->
+        <div class="mb-3">
+          <div class="input-group input-group-lg">
+            <input type="text" id="current-word-input" class="form-control text-center" placeholder="Enter Word..." autocomplete="off" readonly>
+            <button type="button" class="btn btn-outline-danger bold" id="clear-word-btn" tabindex="-1" title="Clear">
+              X
+            </button>
+            <button type="button" class="btn btn-success" id="submit-word-btn">Submit</button>
+          </div>
+        </div>
+        <!-- 3x5 Bootstrap Grid (no borders) -->
         <div>
+        
           <div class="container">
             <div class="row">
               <div class="col text-center"></div>
@@ -66,6 +77,9 @@
       <div class="p-4 border rounded h-100 bg-light">
         <!-- Box Containing Words Found -->
         <h2>Words Found : <span id="words-found">0</span> / <span id="words-findable">0</span></h2>
+        <ul id="words-list" class="list-unstyled">
+          <!-- Found words will be listed here -->
+        </ul>
       </div>
     </div>
   </div>
