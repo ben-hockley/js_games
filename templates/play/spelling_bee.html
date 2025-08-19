@@ -3,6 +3,24 @@
 {% block title %}Spelling Bee{% endblock %}
 
 {% block content %}
-  <h1>Spelling Bee Game</h1>
-  <p>Welcome to the Spelling Bee game! Get ready to test your spelling skills.</p>
+<div class="container my-4">
+  <div class="row">
+    <div class="col-12 col-lg-6 mb-4">
+      <div class="p-4 border rounded h-100 bg-light">
+        <!-- Box Containing Hexagon to pick letters from -->
+        <h2>Hexagon Goes Here</h2>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 mb-4">
+      <div class="p-4 border rounded h-100 bg-light">
+        <!-- Box Containing Words Found -->
+        <h2>Words Found</h2>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="/static/js/spelling_bee.js"></script>
 {% endblock %}
