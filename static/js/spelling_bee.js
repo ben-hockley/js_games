@@ -3,16 +3,14 @@
 fetch('/static/lists/dictionary.json')
   .then(response => response.json())
   .then(data => {
-    // Convert object keys to array if needed
     let wordsArr;
     if (typeof data === 'object' && !Array.isArray(data)) {
       wordsArr = Object.keys(data);
     } else {
       wordsArr = data;
     }
-    // Remove all words under 4 letters
     window.englishWords = wordsArr.filter(word => word.length >= 4);
-    // Now you can use englishWords in your functions
+    startNewGame(); // Start the game only after dictionary is ready
   });
 
 function getRandomLetters() {
@@ -152,23 +150,7 @@ function setupInputHandlers() {
     }
 }
 
-// Call setupInputHandlers after DOM is loaded and after each new game/shuffle
+// Call setupInputHandlers after DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
-    startNewGame(); // Start a new game on load
+    // Do nothing here; wait for dictionary to load
 });
-
-// Re-setup handlers after new game or shuffle (since hexagons are re-rendered)
-function setRandomGrid() {
-    // Set center hexagon to first letter
-    const centerHex = document.querySelector('.hexagon-center');
-    if (centerHex) {
-        centerHex.textContent = randomLetters[0] || '';
-    }
-    // Set outer hexagons to the rest
-    const outerHexes = document.querySelectorAll('.hexagon-outer');
-    outerHexes.forEach((hex, index) => {
-        hex.textContent = randomLetters[index + 1] || '';
-    });
-    // Set up input handlers again
-    setupInputHandlers();
-}

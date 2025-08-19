@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Wordle{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/wordle.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="container my-4">
+  <div class="d-flex flex-column align-items-center">
+    <h2>Wordle</h2>
+    <a class="btn btn-primary mb-3" id="new-game" href="/play/wordle">New Game</a>
+    <div id="wordle-grid">
+      {% for row in range(6) %}
+        <div class="d-flex mb-2">
+          {% for col in range(5) %}
+            <div class="wordle-cell bg-light rounded border mx-1 d-flex align-items-center justify-content-center">
+              <!-- Cell content can go here -->
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/wordle.js"></script>
+{% endblock %}

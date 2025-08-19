@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 import uvicorn
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles  # <-- Add this import
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
@@ -23,6 +23,10 @@ async def home(request: Request):
 @app.get("/play/spelling-bee")
 async def play_spelling_bee(request: Request):
     return templates.TemplateResponse("play/spelling_bee.html", {"request": request})
+
+@app.get("/play/wordle")
+async def play_wordle(request: Request):
+    return templates.TemplateResponse("play/wordle.html", {"request": request})
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
