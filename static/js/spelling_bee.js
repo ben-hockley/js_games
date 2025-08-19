@@ -46,11 +46,16 @@ function setRandomGrid() {
 function startNewGame() {
     randomLetters = getRandomLetters();
 
-    // set the grid
     setRandomGrid();
-
-    // find valid words
     validWords = findValidWords(randomLetters, randomLetters[0], window.englishWords);
+
+    while (validWords.length === 0) {
+        // If no valid words found, regenerate letters
+        randomLetters = getRandomLetters();
+        setRandomGrid();
+        validWords = findValidWords(randomLetters, randomLetters[0], window.englishWords);
+    }
+    
     wordsFound = [];
 
     document.getElementById("words-findable").textContent = validWords.length;
