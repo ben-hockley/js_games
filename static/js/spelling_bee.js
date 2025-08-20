@@ -154,7 +154,15 @@ function setupInputHandlers() {
 
 // Call setupInputHandlers after DOM is loaded and after each new game/shuffle
 document.addEventListener('DOMContentLoaded', function () {
-    startNewGame(); // Start a new game on load
+    // Wait for dictionary to load before starting the game
+    function tryStartGame() {
+        if (window.englishWords && window.englishWords.length > 0) {
+            startNewGame(); // Start a new game on load
+        } else {
+            setTimeout(tryStartGame, 50);
+        }
+    }
+    tryStartGame();
 });
 
 // Re-setup handlers after new game or shuffle (since hexagons are re-rendered)
