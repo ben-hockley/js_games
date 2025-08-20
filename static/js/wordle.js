@@ -76,6 +76,10 @@ document.addEventListener('keydown', function(event) {
     console.log(currentGuess);
 
     if (currentGuess.length === 5) {
+      if (!window.fiveLetterWords.includes(currentGuess.toLowerCase())) {
+        alert("Invalid word!");
+        return;
+      }
       if (currentGuess.toLowerCase() === answer.toLowerCase()) {
         // Correct guess
         grid[currentSquare[0]].forEach(cell => cell.classList.remove("bg-light"));

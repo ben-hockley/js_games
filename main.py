@@ -28,5 +28,9 @@ async def play_spelling_bee(request: Request):
 async def play_wordle(request: Request):
     return templates.TemplateResponse("play/wordle.html", {"request": request})
 
+@app.get("/play/sudoku")
+async def play_sudoku(request: Request):
+    return templates.TemplateResponse("play/sudoku.html", {"request": request})
+
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
