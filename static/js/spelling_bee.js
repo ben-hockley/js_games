@@ -130,12 +130,48 @@ function setupInputHandlers() {
     const input = document.getElementById('current-word-input');
     input.value = '';
 
+    // Remove any previous keydown handler to prevent stacking
+    if (window._spellingBeeKeydownHandler) {
+        document.removeEventListener('keydown', window._spellingBeeKeydownHandler);
+    }
+
     // Click on hexagons
     document.querySelectorAll('.hexagon-center, .hexagon-outer').forEach(hex => {
         hex.onclick = function () {
             input.value += hex.textContent.trim();
         };
     });
+
+    // Keyboard input: allow only grid letters
+    window._spellingBeeKeydownHandler = function (e) {
+        // If focus is on input, let user type freely
+        if (document.activeElement === input) {
+            // If Enter is pressed, trigger submit
+            if (e.key === "Enter") {
+                e.preventDefault();
+                const submitBtn = document.getElementById('submit-word-btn');
+                if (submitBtn) submitBtn.click();
+            }
+            return;
+        }
+        // Only allow grid letters
+        if (!randomLetters) return;
+        const pressed = e.key.toUpperCase();
+        if (randomLetters.includes(pressed)) {
+            input.value += pressed;
+        }
+        // Enter triggers submit
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submit-word-btn');
+            if (submitBtn) submitBtn.click();
+        }
+        // Backspace removes last letter
+        if (e.key === "Backspace") {
+            input.value = input.value.slice(0, -1);
+        }
+    };
+    document.addEventListener('keydown', window._spellingBeeKeydownHandler);
 
     // Submit button
     const submitBtn = document.getElementById('submit-word-btn');
