@@ -1,0 +1,25 @@
+<!-- Made with help from GeeksForGeeks https://www.geeksforgeeks.org/javascript/design-a-2048-game-in-javascript/-->
+
+{% extends "base.html" %}
+
+{% block title %}2048{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/2048.css">
+{% endblock %}
+
+{% block content %}
+<h1>2048</h1>
+<div class="container d-flex justify-content-center align-items-center flex-column">
+    <div class="grid-container mb-3">
+        {% for i in range(16) %}
+            <div class="grid-cell"></div>
+        {% endfor %}
+    </div>
+    <a href="/play/2048" class="btn btn-primary mt-2">Reset</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/2048.js"></script>
+{% endblock %}

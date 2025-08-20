@@ -32,5 +32,9 @@ async def play_wordle(request: Request):
 async def play_sudoku(request: Request):
     return templates.TemplateResponse("play/sudoku.html", {"request": request})
 
+@app.get("/play/2048")
+async def play_2048(request: Request):
+    return templates.TemplateResponse("play/2048.html", {"request": request})
+
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
