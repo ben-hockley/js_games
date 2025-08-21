@@ -4,45 +4,6 @@
 
 {% block styles %}
 <link rel="stylesheet" href="/static/css/minesweeper.css">
-<style>
-.minesweeper-board {
-  display: grid;
-  grid-template-columns: repeat(9, 48px);
-  grid-template-rows: repeat(9, 48px);
-  gap: 3px;
-  margin: 30px auto;
-  background: #888;
-  border-radius: 12px;
-  width: max-content;
-}
-.minesweeper-cell {
-  width: 48px;
-  height: 48px;
-  background: #e0e0e0;
-  border: none;
-  font-weight: bold;
-  font-size: 1.65rem;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  transition: background 0.1s;
-  user-select: none;
-  outline: none;
-  border-radius: 6px;
-}
-.minesweeper-cell.revealed {
-  background: #bdbdbd;
-  cursor: default;
-}
-.minesweeper-cell.mine {
-  background: #ff5252;
-  color: #fff;
-}
-.minesweeper-cell.flagged {
-  background: #ffd600;
-  color: #333;
-}
-</style>
 {% endblock %}
 
 {% block content %}
