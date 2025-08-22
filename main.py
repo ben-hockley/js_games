@@ -40,5 +40,9 @@ async def play_2048(request: Request):
 async def play_minesweeper(request: Request):
     return templates.TemplateResponse("play/minesweeper.html", {"request": request})
 
+@app.get("/play/snake")
+async def play_snake(request: Request):
+    return templates.TemplateResponse("play/snake.html", {"request": request})
+
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
