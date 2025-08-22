@@ -1,5 +1,3 @@
-// get the list of words from the dictionary and filter it down to only 5 letter words to get all
-// the valid guesses.
 fetch('/static/lists/dictionary.json')
   .then(response => response.json())
   .then(data => {
@@ -9,15 +7,22 @@ fetch('/static/lists/dictionary.json')
     } else {
       wordsArr = data;
     }
+
+    // get a list of 5 letter words (including plurals) for guesses.
     window.fiveLetterWords = wordsArr.filter(word => word.length === 5);
 
+    // get a list of 5 letter words (without plurals) for potential solutions.
+    window.fiveLetterNonPluralWords = window.fiveLetterWords.filter(
+      word => !word.endsWith('s')
+    );
     // Only start the game after the words are loaded
     startGame();
   });
 
 function getRandomWord() {
-  const randomIndex = Math.floor(Math.random() * window.fiveLetterWords.length);
-  return window.fiveLetterWords[randomIndex];
+  // Pick a random word from the list of non-plural 5-letter words.
+  const randomIndex = Math.floor(Math.random() * window.fiveLetterNonPluralWords.length);
+  return window.fiveLetterNonPluralWords[randomIndex];
 }
 
 function getGridCells2D() {
@@ -87,16 +92,38 @@ document.addEventListener('keydown', function(event) {
         alert("Congratulations! You've guessed the word!");
       } else {
         // Incorrect guess
-        grid[currentSquare[0]].forEach((cell, index) => {
-          cell.classList.remove("bg-light");
-          if (currentGuess.toLowerCase()[index] === answer.toLowerCase()[index]) {
-            cell.classList.add("bg-success");
-          } else if (answer.toLowerCase().includes(cell.textContent.toLowerCase())) {
-            cell.classList.add("bg-warning");
-          } else {
-            cell.classList.add("bg-danger");
+
+        // Standard Wordle coloring logic
+        const guess = currentGuess.toLowerCase();
+        const ans = answer.toLowerCase();
+        const rowCells = grid[currentSquare[0]];
+        let answerLetterCounts = {};
+        // First pass: mark greens and count answer letters
+        for (let i = 0; i < 5; i++) {
+          rowCells[i].classList.remove("bg-light", "bg-success", "bg-warning", "bg-danger");
+          const a = ans[i];
+          answerLetterCounts[a] = (answerLetterCounts[a] || 0) + 1;
+        }
+        // Track which letters are green
+        let greenMask = Array(5).fill(false);
+        for (let i = 0; i < 5; i++) {
+          if (guess[i] === ans[i]) {
+            rowCells[i].classList.add("bg-success");
+            greenMask[i] = true;
+            answerLetterCounts[guess[i]]--;
           }
-        });
+        }
+        // Second pass: mark yellows and reds
+        for (let i = 0; i < 5; i++) {
+          if (greenMask[i]) continue;
+          const g = guess[i];
+          if (answerLetterCounts[g] > 0) {
+            rowCells[i].classList.add("bg-warning");
+            answerLetterCounts[g]--;
+          } else {
+            rowCells[i].classList.add("bg-danger");
+          }
+        }
 
         // Move to next row
         currentSquare[0]++;
