@@ -1,0 +1,41 @@
+body {
+    background: #222;
+    color: #fff;
+}
+#connect4-board {
+    display: grid;
+    grid-template-rows: repeat(6, 60px);
+    grid-template-columns: repeat(7, 60px);
+    gap: 6px;
+    background: #1976d2;
+    border-radius: 12px;
+    margin: 30px auto 10px auto;
+    width: max-content;
+    box-shadow: 0 4px 16px #0008;
+}
+.connect4-cell {
+    width: 60px;
+    height: 60px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px #0004 inset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.connect4-cell.player {
+    background: #fbc02d;
+}
+.connect4-cell.computer {
+    background: #d32f2f;
+}
+#connect4-message {
+    font-size: 1.3rem;
+    margin: 10px 0 20px 0;
+    min-height: 1.5em;
+}
+#connect4-restart {
+    margin-top: 10px;
+}

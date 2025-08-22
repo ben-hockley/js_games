@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/connect_4.css">
+{% endblock %}
+
+{% block title %}
+Connect 4
+{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+	<h1 class="mt-4">Connect 4 (VS CPU)</h1>
+	<div id="connect4-message"></div>
+	<div id="connect4-board" class="mx-auto"></div>
+	<button id="connect4-restart" class="btn btn-primary">Restart</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/connect_4.js"></script>
+{% endblock %}
