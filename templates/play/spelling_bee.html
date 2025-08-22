@@ -76,7 +76,15 @@
     <div class="col-12 col-lg-6 mb-4">
       <div class="p-4 border rounded h-100 bg-light">
         <!-- Box Containing Words Found -->
-        <h2>Words Found : <span id="words-found">0</span> / <span id="words-findable">0</span></h2>
+      <h2>Words Found : <span id="words-found">0</span> / <span id="words-findable">0</span></h2>
+      <div class="d-flex align-items-center mb-2" style="gap: 1rem;">
+        <h4 id="score-board" class="mb-0">Score: <span id="current-score">0</span>/<span id="max-score">0</span></h4>
+        <div class="flex-grow-1">
+          <div class="progress" style="height: 1.5rem;">
+            <div id="score-progress" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+      </div>
         <ul id="words-list" class="list-unstyled">
           <!-- Found words will be listed here -->
         </ul>

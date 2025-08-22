@@ -25,18 +25,27 @@ function getRandomLetters() {
     return result;
 }
 
+function updateScoreBar() {
+  const percent = maxScore > 0 ? Math.round((currentScore / maxScore) * 100) : 0;
+  const bar = document.getElementById('score-progress');
+  bar.style.width = percent + '%';
+  bar.setAttribute('aria-valuenow', percent);
+}
+
 // Variables used to hold the randomly generated letter list and corresponding list of valid words.
 var randomLetters;
 var validWords;
 var wordsFound;
+var maxScore;
+var currentScore;
 
 function setRandomGrid() {
-    // Set center hexagon to first letter
+    // Set center hexagon to first letter (this letter must be used in any valid answers)
     const centerHex = document.querySelector('.hexagon-center');
     if (centerHex) {
         centerHex.textContent = randomLetters[0] || '';
     }
-    // Set outer hexagons to the rest
+    // Set outer hexagons to the rest (these letters can be used in valid answers but are not required)
     const outerHexes = document.querySelectorAll('.hexagon-outer');
     outerHexes.forEach((hex, index) => {
         hex.textContent = randomLetters[index + 1] || '';
@@ -55,14 +64,26 @@ function startNewGame() {
         setRandomGrid();
         validWords = findValidWords(randomLetters, randomLetters[0], window.englishWords);
     }
-    
+
+    console.log("Valid Words:");
+    console.log(validWords);
+
+    // Calculate the maximum score obtainable based on the list of valid words.
+    maxScore = getScore(validWords);
+    console.log("Max Score: " + maxScore);
+
+    // Reset the array of words found.
     wordsFound = [];
+    currentScore = getScore(wordsFound);
 
     document.getElementById("words-findable").textContent = validWords.length;
     document.getElementById("words-found").textContent = wordsFound.length;
+    document.getElementById("max-score").textContent = maxScore;
+    document.getElementById("current-score").textContent = currentScore;
 
     // Reset the words found list in the DOM
     updateWordsList();
+    updateScoreBar();
 }
 
 function shuffleGrid() {
@@ -80,7 +101,7 @@ function findValidWords(letters, centerLetter, dictionary) {
     const center = centerLetter.toLowerCase();
     return dictionary.filter(word => {
         const w = word.toLowerCase();
-        // if (w.length < 4) return false;
+        // The word MUST contain the center letter.
         if (!w.includes(center)) return false;
         // Every letter in word must be in letterSet
         for (let c of w) {
@@ -88,6 +109,21 @@ function findValidWords(letters, centerLetter, dictionary) {
         }
         return true;
     });
+}
+
+// calculates the score based on a list of words.
+// can be used to calculate the maximum score based on the array of all valid words
+// or the current score based on the array of words found so far.
+function getScore(validWords) {
+    score = 0;
+    validWords.forEach(word => {
+        if (word.length === 4) {
+            score += 1;
+        } else {
+            score += word.length;
+        }
+    })
+    return score;
 }
 
 function handleWordSubmit() {
@@ -103,8 +139,11 @@ function handleWordSubmit() {
             message = "This word has already been found";
         } else {
             wordsFound.push(word);
+            currentScore = getScore(wordsFound)
             document.getElementById("words-found").textContent = wordsFound.length;
+            document.getElementById("current-score").textContent = currentScore;
             updateWordsList(); // Update the DOM list
+            updateScoreBar();
             message = "New word!";
         }
     } else {
