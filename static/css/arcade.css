@@ -1,0 +1,129 @@
+/* Ensure switch labels are always visible and not overlapped by the switch */
+.navbar .form-switch {
+  min-width: 10em;
+  gap: 0.5em;
+}
+.navbar .form-switch .form-check-label {
+  font-size: 1.1em;
+  position: static !important;
+  z-index: 2;
+  background: transparent !important;
+  padding: 0;
+}
+.navbar .form-switch .form-check-input {
+  position: static !important;
+  margin: 0 0.5em;
+  z-index: 1;
+}
+.arcade-style #current-word-input::placeholder,
+.arcade-style .form-control::placeholder {
+  color: #fff200 !important;
+  text-shadow: 0 0 4px #ff00c8, 0 0 2px #000;
+  filter: none !important;
+  opacity: 1 !important;
+}
+/* Arcade style overrides for Spelling Bee */
+.arcade-style .hexagon-outer {
+  background: #222 !important;
+  color: #fff200 !important;
+  border: 3px solid #00fff7 !important;
+  text-shadow: 0 0 6px #ff00c8, 0 0 2px #000;
+}
+.arcade-style .hexagon-center {
+  background: #ff00c8 !important;
+  color: #fff200 !important;
+  border: 3px solid #00fff7 !important;
+  text-shadow: 0 0 6px #00fff7, 0 0 2px #000;
+}
+.arcade-style #current-word-input,
+.arcade-style .form-control {
+  background: #1a0033 !important;
+  color: #fff200 !important;
+  border: 2px solid #00fff7 !important;
+  text-shadow: 0 0 4px #ff00c8;
+}
+.arcade-style .btn-success, .arcade-style .btn-outline-danger, .arcade-style .btn-primary, .arcade-style .btn-secondary {
+  background: #ff00c8 !important;
+  color: #fff200 !important;
+  border: 2px solid #00fff7 !important;
+  text-shadow: 0 0 4px #00fff7;
+}
+.arcade-style .btn-success:hover, .arcade-style .btn-outline-danger:hover, .arcade-style .btn-primary:hover, .arcade-style .btn-secondary:hover {
+  background: #00fff7 !important;
+  color: #ff00c8 !important;
+  border: 2px solid #ff00c8 !important;
+}
+.arcade-style .p-4.bg-light, .arcade-style .border.bg-light {
+  background: #1a0033 !important;
+  color: #fff200 !important;
+  border: 2px solid #00fff7 !important;
+}
+.arcade-style h2, .arcade-style h4, .arcade-style #words-list, .arcade-style .progress-bar {
+  color: #fff200 !important;
+  text-shadow: 0 0 4px #00fff7, 0 0 8px #ff00c8;
+}
+.arcade-style .progress {
+  background: #222 !important;
+  border: 2px solid #00fff7 !important;
+}
+.arcade-style .progress-bar.bg-success {
+  background: linear-gradient(90deg, #ff00c8 0%, #00fff7 100%) !important;
+}
+/* Arcade Art Style for JS Games */
+.arcade-style {
+  font-family: 'Press Start 2P', 'VT323', 'Courier New', Courier, monospace;
+  background: linear-gradient(135deg, #1a0033 0%, #330066 100%);
+  color: #fff200;
+}
+
+.arcade-style .navbar, .arcade-style .card, .arcade-style .btn, .arcade-style .container, .arcade-style .row, .arcade-style .col-12, .arcade-style .col-sm-6, .arcade-style .col-md-4, .arcade-style .col-lg-3 {
+  border-radius: 0 !important;
+  box-shadow: 0 0 8px #00fff7, 0 0 16px #ff00c8;
+}
+
+.arcade-style .navbar {
+  background: #0d0026 !important;
+  border-bottom: 4px solid #ff00c8;
+}
+
+.arcade-style .navbar-brand, .arcade-style .nav-link {
+  color: #fff200 !important;
+  text-shadow: 0 0 4px #00fff7, 0 0 8px #ff00c8;
+  font-family: 'Press Start 2P', 'VT323', 'Courier New', Courier, monospace;
+}
+
+.arcade-style .card {
+  background: #1a0033;
+  border: 2px solid #00fff7;
+  color: #fff200;
+}
+
+.arcade-style .card-title {
+  font-size: 1.1rem;
+  text-shadow: 0 0 4px #ff00c8;
+}
+
+.arcade-style .btn-primary {
+  background: #ff00c8;
+  border: 2px solid #00fff7;
+  color: #fff200;
+  font-family: 'Press Start 2P', 'VT323', 'Courier New', Courier, monospace;
+  text-shadow: 0 0 4px #00fff7;
+}
+
+.arcade-style .btn-primary:hover {
+  background: #00fff7;
+  color: #ff00c8;
+  border: 2px solid #ff00c8;
+}
+
+.arcade-style h1, .arcade-style h5, .arcade-style p {
+  text-shadow: 0 0 4px #00fff7, 0 0 8px #ff00c8;
+}
+
+.arcade-style img {
+  filter: saturate(1.5) contrast(1.2) drop-shadow(0 0 8px #00fff7);
+}
+
+/* Google Fonts for Arcade Style */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
