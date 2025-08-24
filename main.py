@@ -18,35 +18,35 @@ async def root():
 
 @app.get("/home")
 async def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+    return templates.TemplateResponse(request, "home.html")
 
 @app.get("/play/spelling-bee")
 async def play_spelling_bee(request: Request):
-    return templates.TemplateResponse("play/spelling_bee.html", {"request": request})
+    return templates.TemplateResponse(request, "play/spelling_bee.html")
 
 @app.get("/play/wordle")
 async def play_wordle(request: Request):
-    return templates.TemplateResponse("play/wordle.html", {"request": request})
+    return templates.TemplateResponse(request, "play/wordle.html")
 
 @app.get("/play/sudoku")
 async def play_sudoku(request: Request):
-    return templates.TemplateResponse("play/sudoku.html", {"request": request})
+    return templates.TemplateResponse(request, "play/sudoku.html")
 
 @app.get("/play/2048")
 async def play_2048(request: Request):
-    return templates.TemplateResponse("play/2048.html", {"request": request})
+    return templates.TemplateResponse(request, "play/2048.html")
 
 @app.get("/play/minesweeper")
 async def play_minesweeper(request: Request):
-    return templates.TemplateResponse("play/minesweeper.html", {"request": request})
+    return templates.TemplateResponse(request, "play/minesweeper.html")
 
 @app.get("/play/snake")
 async def play_snake(request: Request):
-    return templates.TemplateResponse("play/snake.html", {"request": request})
+    return templates.TemplateResponse(request, "play/snake.html")
 
 @app.get("/play/connect-4")
 async def play_connect_4(request: Request):
-    return templates.TemplateResponse("play/connect_4.html", {"request": request})
+    return templates.TemplateResponse(request, "play/connect_4.html")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
