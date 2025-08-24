@@ -1,0 +1,16 @@
+.navbar .form-switch {
+  min-width: 10em;
+  gap: 0.5em;
+}
+.navbar .form-switch .form-check-label {
+  font-size: 1.1em;
+  position: static !important;
+  z-index: 2;
+  background: transparent !important;
+  padding: 0;
+}
+.navbar .form-switch .form-check-input {
+  position: static !important;
+  margin: 0 0.5em;
+  z-index: 1;
+}
