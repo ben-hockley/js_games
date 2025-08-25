@@ -6,6 +6,12 @@ from fastapi.staticfiles import StaticFiles
 # Import database setup
 from database import Base, engine
 from database import insert_user, get_user_by_username, verify_password
+from sqlalchemy.orm.exc import MultipleResultsFound
+from sqlalchemy import or_
+from starlette.middleware.sessions import SessionMiddleware
+
+# Create Account form handler (POST)
+import re
 
 # Create all tables in the database (run once at startup)
 # Base.metadata.create_all(bind=engine)
@@ -16,8 +22,6 @@ from database import insert_user, get_user_by_username, verify_password
 #    user = insert_user(username=username, password=password, email=email)
 #    return {"id": user.id, "username": user.username, "email": user.email}
 
-
-from starlette.middleware.sessions import SessionMiddleware
 app = FastAPI()
 # Set a secret key for session management
 app.add_middleware(SessionMiddleware, secret_key="your_secret_key_here")
@@ -101,9 +105,6 @@ async def signout(request: Request):
 async def create_account_get(request: Request):
     return templates.TemplateResponse("create_account.html", {"request": request})
 
-# Create Account form handler (POST)
-import re
-
 def validate_username(username):
     return re.fullmatch(r"^[a-zA-Z0-9_]{3,20}$", username)
 
@@ -112,9 +113,6 @@ def validate_password(password):
 
 def validate_email(email):
     return re.fullmatch(r"^[\w\.-]+@[\w\.-]+\.\w{2,}$", email)
-
-from sqlalchemy.orm.exc import MultipleResultsFound
-from sqlalchemy import or_
 
 @app.post("/create-account")
 async def create_account_post(request: Request, username: str = Form(...), password: str = Form(...), email: str = Form(...)):

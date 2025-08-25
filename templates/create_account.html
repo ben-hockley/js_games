@@ -30,30 +30,16 @@
             <input type="password" class="form-control" id="password" name="password" minlength="6" maxlength="32" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+=-]{6,32}$" required
                 onfocus="showPasswordHelp()" onblur="hidePasswordHelp()">
             <div id="passwordHelp" class="form-text text-info d-none">
-                Password must be 6-32 characters, include at least one letter and one number.
+                <span id="pw-length" class="me-2">&#10060;</span> 6-32 characters<br>
+                <span id="pw-letter" class="me-2">&#10060;</span> At least one letter<br>
+                <span id="pw-number" class="me-2">&#10060;</span> At least one number<br>
             </div>
         </div>
         <button type="submit" class="btn btn-success">Create Account</button>
     </form>
-    <script>
-        function showUsernameHelp() {
-            document.getElementById('usernameHelp').classList.remove('d-none');
-        }
-        function hideUsernameHelp() {
-            document.getElementById('usernameHelp').classList.add('d-none');
-        }
-        function showEmailHelp() {
-            document.getElementById('emailHelp').classList.remove('d-none');
-        }
-        function hideEmailHelp() {
-            document.getElementById('emailHelp').classList.add('d-none');
-        }
-        function showPasswordHelp() {
-            document.getElementById('passwordHelp').classList.remove('d-none');
-        }
-        function hidePasswordHelp() {
-            document.getElementById('passwordHelp').classList.add('d-none');
-        }
-    </script>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/create_account.js"></script>
 {% endblock %}
