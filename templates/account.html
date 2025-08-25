@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Account Details{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Account Details</h2>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <form method="post" action="/signout">
+        <button type="submit" class="btn btn-danger">Sign Out</button>
+    </form>
+</div>
+{% endblock %}

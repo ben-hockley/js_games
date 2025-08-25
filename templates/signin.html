@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Sign In{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Sign In</h2>
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        Username or password is incorrect
+    </div>
+    {% endif %}
+    <form method="post" action="/signin">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign In</button>
+    </form>
+    <div class="mt-3">
+        <span>Don't have an account?</span>
+        <a href="/create-account" class="btn btn-link">Create Account</a>
+    </div>
+</div>
+{% endblock %}

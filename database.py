@@ -1,7 +1,21 @@
+# Password hashing utilities
+from passlib.context import CryptContext
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from config.config import DB_USER, DB_PASSWORD
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# Hash a password
+def hash_password(password: str) -> str:
+	return pwd_context.hash(password)
+
+# Verify a password
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+	return pwd_context.verify(plain_password, hashed_password)
+
 
 # Update these values with your actual database credentials
 DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@localhost:8080/js_games_db"
@@ -23,10 +37,12 @@ class User(Base):
 	email = Column(String, unique=True, nullable=False)
 
 # Method to insert a new user
+
 def insert_user(username: str, password: str, email: str):
 	session = SessionLocal()
 	try:
-		new_user = User(username=username, password=password, email=email)
+		hashed_pw = hash_password(password)
+		new_user = User(username=username, password=hashed_pw, email=email)
 		session.add(new_user)
 		session.commit()
 		session.refresh(new_user)
@@ -36,8 +52,12 @@ def insert_user(username: str, password: str, email: str):
 		raise e
 	finally:
 		session.close()
-	
-
-
-
-
+		
+# Method to get a user by username
+def get_user_by_username(username: str):
+	session = SessionLocal()
+	try:
+		user = session.query(User).filter(User.username == username).first()
+		return user
+	finally:
+		session.close()
