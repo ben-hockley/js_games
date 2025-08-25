@@ -1,8 +1,14 @@
+
 from fastapi import FastAPI, Request
 import uvicorn
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+# Import database setup
+from database import Base, engine
+
+# Create all tables in the database (run once at startup)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
