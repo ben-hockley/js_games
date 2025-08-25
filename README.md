@@ -94,6 +94,8 @@
 
 * [![FastAPI][FastAPI.com]][Bootstrap-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
+* [![PostgreSQL][PostgreSQL]][PostgreSQL-url]
+* [![SQLAlchemy][SQLAlchemy]][SQLAlchemy-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -260,3 +262,11 @@ Project Link: [https://github.com/ben-hockley/js_games](https://github.com/ben-h
 [FastAPI-url]: https://fastapi.tiangolo.com/
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
+[PostgreSQL]: https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white
+[PostgreSQL-url]: https://www.postgresql.org/
+[SQLAlchemy]: https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white
+[SQLAlchemy-url]: https://www.sqlalchemy.org/
+
+
+
+
