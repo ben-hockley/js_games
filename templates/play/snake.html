@@ -8,36 +8,43 @@
 
 {% block content %}
 	<div class="container-fluid">
-		<div class="row justify-content-center">
-			<div class="col-12 col-sm-8 col-md-6 col-lg-4 text-center mt-4">
+		<div class="row justify-content-center align-items-center mt-4" style="min-height: 80vh;">
+			<!-- Empty Box on the left to keep game box centered -->
+			<div class="col-12 col-md-12 col-lg-4">
+			</div>
+			<!-- Game Box Centered -->
+			<div class="col-12 col-md-12 col-lg-4 text-center mb-4 d-flex flex-column align-items-center justify-content-center">
 				<h1>Snake</h1>
 				<div id="score">Score: 0</div>
 				<div class="d-flex justify-content-center">
 					<div id="snake-board"></div>
-					<div class="ms-4" style="min-width:180px;">
-						<h5 class="mb-2">Leaderboard</h5>
-						<table class="table table-sm table-bordered mb-0">
-							<thead>
-								<tr><th>Rank</th><th>User</th><th>Score</th></tr>
-							</thead>
-							<tbody>
-								{% for entry in leaderboard %}
-								<tr>
-									<td>{{ loop.index }}</td>
-									<td>{{ entry.username }}</td>
-									<td>{{ entry.score }}</td>
-								</tr>
-								{% endfor %}
-								{% if leaderboard|length == 0 %}
-								<tr><td colspan="3">No scores yet</td></tr>
-								{% endif %}
-							</tbody>
-						</table>
-					</div>
 				</div>
 				<button id="start-btn" class="btn btn-primary mt-3">Start Game</button>
 				<button id="restart-btn" class="btn btn-success mt-3 d-none">Restart</button>
 				<div id="game-message" class="mt-2"></div>
+			</div>
+			<!-- Leaderboard on the right -->
+			<div class="col-12 col-md-12 col-lg-4 d-flex align-items-center justify-content-center">
+				<div class="w-100 d-flex flex-column align-items-center" style="min-width:220px; max-width:320px;">
+					<h5 class="mb-2">Leaderboard</h5>
+					<table class="table table-sm table-bordered mb-0 text-center">
+						<thead>
+							<tr><th>Rank</th><th>User</th><th>Score</th></tr>
+						</thead>
+						<tbody>
+							{% for entry in leaderboard %}
+							<tr>
+								<td>{{ loop.index }}</td>
+								<td>{{ entry.username }}</td>
+								<td>{{ entry.score }}</td>
+							</tr>
+							{% endfor %}
+							{% if leaderboard|length == 0 %}
+							<tr><td colspan="3">No scores yet</td></tr>
+							{% endif %}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
