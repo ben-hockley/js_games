@@ -26,9 +26,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 # Sample User model
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func
+from sqlalchemy.orm import relationship
 
-
+# User model
 class User(Base):
 	__tablename__ = "users"
 	id = Column(Integer, primary_key=True, index=True)
@@ -36,8 +37,18 @@ class User(Base):
 	password = Column(String, nullable=False)
 	email = Column(String, unique=True, nullable=False)
 
-# Method to insert a new user
 
+# WordleScore model
+class WordleScore(Base):
+	__tablename__ = "wordle_scores"
+	id = Column(Integer, primary_key=True, index=True)
+	user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+	score = Column(Integer, nullable=False)
+	played_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+	user = relationship("User", backref="wordle_scores")
+
+# Method to insert a new user
 def insert_user(username: str, password: str, email: str):
 	session = SessionLocal()
 	try:
@@ -52,6 +63,25 @@ def insert_user(username: str, password: str, email: str):
 		raise e
 	finally:
 		session.close()
+
+# Method to insert a WordleScore
+def insert_wordle_score(user_id: int, score: int, played_at=None):
+	session = SessionLocal()
+	try:
+		new_score = WordleScore(user_id=user_id, score=score)
+		if played_at is not None:
+			new_score.played_at = played_at
+		session.add(new_score)
+		session.commit()
+		session.refresh(new_score)
+		return new_score
+	except Exception as e:
+		session.rollback()
+		raise e
+	finally:
+		session.close()
+
+
 		
 # Method to get a user by username
 def get_user_by_username(username: str):

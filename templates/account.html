@@ -8,5 +8,36 @@
     <form method="post" action="/signout">
         <button type="submit" class="btn btn-danger">Sign Out</button>
     </form>
+
+    <h3 class="mt-5">Wordle Score Distribution</h3>
+    <canvas id="wordleChart" width="400" height="200"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const scoreFreq = {{ score_freq | tojson }};
+        const labels = ["1", "2", "3", "4", "5", "6", "Lose"];
+        const data = [scoreFreq["1"], scoreFreq["2"], scoreFreq["3"], scoreFreq["4"], scoreFreq["5"], scoreFreq["6"], scoreFreq["0"]];
+        const ctx = document.getElementById('wordleChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Games',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        precision: 0
+                    }
+                }
+            }
+        });
+    </script>
 </div>
 {% endblock %}

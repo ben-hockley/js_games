@@ -34,6 +34,26 @@ function getGridCells2D() {
 // const grid = getGridCells2D();
 // grid[0][0] is the first cell, grid[5][4] is the last cell
 
+// Send a POST request to /wordle-score with the score
+function sendWordleScore(score) {
+  fetch('/wordle-score', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ score: score }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data && data.message) {
+        alert(data.message);
+      }
+    })
+    .catch(error => {
+      alert('Error saving score.');
+    });
+}
+
 const grid = getGridCells2D();
 
 var answer;
@@ -54,6 +74,8 @@ function startGame() {
 function newGame() {
   startGame();
 }
+
+
 
 document.addEventListener('keydown', function(event) {
 
@@ -89,6 +111,7 @@ document.addEventListener('keydown', function(event) {
         // Correct guess
         grid[currentSquare[0]].forEach(cell => cell.classList.remove("bg-light"));
         grid[currentSquare[0]].forEach(cell => cell.classList.add("bg-success"));
+        sendWordleScore(currentSquare[0] + 1); // Score is number of guesses used (1-based)
         alert("Congratulations! You've guessed the word!");
       } else {
         // Incorrect guess
@@ -131,6 +154,7 @@ document.addEventListener('keydown', function(event) {
 
         // Check if we have more rows to fill
         if (currentSquare[0] >= grid.length) {
+          sendWordleScore(0); // 0 means user did not guess the word (lose)
           alert(`Game over! The word was: ${answer}`);
         }
       }
