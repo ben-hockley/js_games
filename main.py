@@ -1,32 +1,32 @@
-from fastapi import FastAPI, Request, Form, APIRouter
 import uvicorn
+
+# FASTAPI
+from fastapi import FastAPI, Request, Form, APIRouter
 from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 # Import database setup
-from database import Base, engine
-from database import insert_user, get_user_by_username, verify_password, User
+from database import User, WordleScore, SnakeScore, Score2048
+from database import insert_user, get_user_by_username, verify_password
 from database import insert_wordle_score, insert_snake_score, insert_2048_score
-from database import SessionLocal, WordleScore, get_top_2048_scores, get_user_top_2048_scores
-from sqlalchemy.orm.exc import MultipleResultsFound
+from database import SessionLocal, get_top_2048_scores, get_user_top_2048_scores
 from sqlalchemy import or_
-from starlette.middleware.sessions import SessionMiddleware
 
-# Create Account form handler (POST)
+from starlette.middleware.sessions import SessionMiddleware
 import re
+
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Create all tables in the database (run once at startup)
 # Base.metadata.create_all(bind=engine)
 
-# Example of inserting a user
-#@app.post("/users/")
-#async def create_user(username: str, password: str, email: str):
-#    user = insert_user(username=username, password=password, email=email)
-#    return {"id": user.id, "username": user.username, "email": user.email}
-
 app = FastAPI()
 # Set a secret key for session management
-app.add_middleware(SessionMiddleware, secret_key="your_secret_key_here")
+app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 
 # Mount the static directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -72,9 +72,7 @@ async def wordle_score(request: Request):
 @app.get("/play/sudoku")
 async def play_sudoku(request: Request):
     return templates.TemplateResponse(request, "play/sudoku.html")
-
 # 2048
-from database import get_top_2048_scores
 
 @app.get("/play/2048")
 async def play_2048(request: Request):
@@ -106,7 +104,6 @@ async def play_minesweeper(request: Request):
 @app.get("/play/snake")
 async def play_snake(request: Request):
     # Get top 5 snake scores and usernames
-    from database import SessionLocal, SnakeScore, User
     session = SessionLocal()
     leaderboard = []
     try:
@@ -168,7 +165,6 @@ async def account(request: Request):
                 score_freq[str(score)] = score_freq.get(str(score), 0) + 1
 
             # Top 5 overall snake scores (all users)
-            from database import SnakeScore, User
             results = (
                 session.query(SnakeScore.score, User.username)
                 .join(User, SnakeScore.user_id == User.id)

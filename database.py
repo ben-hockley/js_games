@@ -1,22 +1,9 @@
-def get_user_top_2048_scores(user_id, limit=5):
-	session = SessionLocal()
-	try:
-		results = (
-			session.query(Score2048.score, Score2048.played_at)
-			.filter(Score2048.user_id == user_id)
-			.order_by(Score2048.score.desc(), Score2048.played_at.asc())
-			.limit(limit)
-			.all()
-		)
-		return [{"score": score, "played_at": played_at} for score, played_at in results]
-	finally:
-		session.close()
-# Password hashing utilities
 from passlib.context import CryptContext
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship, joinedload
+
 from config.config import DB_USER, DB_PASSWORD
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -37,10 +24,6 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
-
-# Sample User model
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func
-from sqlalchemy.orm import relationship
 
 # User model
 class User(Base):
@@ -157,8 +140,8 @@ def get_user_by_username(username: str):
 	finally:
 		session.close()
 
-from sqlalchemy.orm import joinedload
 
+# get the top scores in 2048 for all users.
 def get_top_2048_scores(limit=5):
     session = SessionLocal()
     try:
@@ -172,3 +155,18 @@ def get_top_2048_scores(limit=5):
         return [{"score": score, "username": username} for score, username in results]
     finally:
         session.close()
+
+# get the user's high scores on 2048
+def get_user_top_2048_scores(user_id, limit=5):
+	session = SessionLocal()
+	try:
+		results = (
+			session.query(Score2048.score, Score2048.played_at)
+			.filter(Score2048.user_id == user_id)
+			.order_by(Score2048.score.desc(), Score2048.played_at.asc())
+			.limit(limit)
+			.all()
+		)
+		return [{"score": score, "played_at": played_at} for score, played_at in results]
+	finally:
+		session.close()
