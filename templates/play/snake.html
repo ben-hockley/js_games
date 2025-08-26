@@ -14,6 +14,26 @@
 				<div id="score">Score: 0</div>
 				<div class="d-flex justify-content-center">
 					<div id="snake-board"></div>
+					<div class="ms-4" style="min-width:180px;">
+						<h5 class="mb-2">Leaderboard</h5>
+						<table class="table table-sm table-bordered mb-0">
+							<thead>
+								<tr><th>Rank</th><th>User</th><th>Score</th></tr>
+							</thead>
+							<tbody>
+								{% for entry in leaderboard %}
+								<tr>
+									<td>{{ loop.index }}</td>
+									<td>{{ entry.username }}</td>
+									<td>{{ entry.score }}</td>
+								</tr>
+								{% endfor %}
+								{% if leaderboard|length == 0 %}
+								<tr><td colspan="3">No scores yet</td></tr>
+								{% endif %}
+							</tbody>
+						</table>
+					</div>
 				</div>
 				<button id="start-btn" class="btn btn-primary mt-3">Start Game</button>
 				<button id="restart-btn" class="btn btn-success mt-3 d-none">Restart</button>

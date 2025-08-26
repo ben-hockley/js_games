@@ -48,6 +48,17 @@ class WordleScore(Base):
 
 	user = relationship("User", backref="wordle_scores")
 
+# SnakeScore model
+class SnakeScore(Base):
+	__tablename__ = "snake_scores"
+	id = Column(Integer, primary_key=True, index=True)
+	user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+	score = Column(Integer, nullable=False)
+	played_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+	user = relationship("User", backref="snake_scores")
+
+
 # Method to insert a new user
 def insert_user(username: str, password: str, email: str):
 	session = SessionLocal()
@@ -81,6 +92,22 @@ def insert_wordle_score(user_id: int, score: int, played_at=None):
 	finally:
 		session.close()
 
+# Method to insert a SnakeScore
+def insert_snake_score(user_id: int, score: int, played_at=None):
+	session = SessionLocal()
+	try:
+		new_score = SnakeScore(user_id=user_id, score=score)
+		if played_at is not None:
+			new_score.played_at = played_at
+		session.add(new_score)
+		session.commit()
+		session.refresh(new_score)
+		return new_score
+	except Exception as e:
+		session.rollback()
+		raise e
+	finally:
+		session.close()
 
 		
 # Method to get a user by username

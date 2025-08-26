@@ -33,6 +33,26 @@ function renderBoard() {
     }
 }
 
+// Send a POST request to /snake-score with the score
+function sendSnakeScore(score) {
+    fetch('/snake-score', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ score: score }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data && data.message) {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        alert('Error saving score.');
+    });
+}
+
 function gameLoop() {
     if (gameOver) return;
     const head = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
@@ -45,6 +65,7 @@ function gameLoop() {
         document.getElementById('game-message').textContent = 'Game Over!';
         gameOver = true;
         clearInterval(interval);
+        sendSnakeScore(score);
         return;
     }
     snake.unshift(head);

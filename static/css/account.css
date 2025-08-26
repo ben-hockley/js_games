@@ -1,0 +1,99 @@
+/* Make graph and table titles more visible on white background (arcade style) */
+.stats-box h3,
+.score-table-box h4,
+.snake-tables-flex .score-table-box h4 {
+  color: #1a0033;
+  text-shadow: 0 2px 8px #fff, 0 0 2px #00fff7, 0 0 2px #ff00c8;
+  font-weight: bold;
+}
+/* Responsive flex container for stats (Wordle + Snake) */
+.stats-flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+}
+.stats-box {
+  flex: 1 1 48%;
+  min-width: 320px;
+  max-width: 600px;
+  background: #f8f9fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 2rem 1rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.wordle-box {
+  justify-content: center;
+}
+.snake-box {
+  justify-content: flex-start;
+}
+.snake-tables-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (min-width: 992px) {
+  .stats-flex-container {
+    flex-direction: row;
+  }
+  .stats-box {
+    min-width: 400px;
+    max-width: 50%;
+  }
+  .snake-tables-flex {
+    flex-direction: column;
+  }
+}
+@media (max-width: 991px) {
+  .stats-flex-container {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .stats-box {
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+/* Responsive container for score tables on account page */
+.score-tables-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+  background: #f8f9fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 2rem 1rem;
+  margin: 0 auto;
+  max-width: 900px;
+}
+.score-table-box {
+  flex: 1 1 320px;
+  min-width: 280px;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  padding: 1rem;
+  margin: 0 auto;
+}
+@media (max-width: 900px) {
+  .score-tables-container {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem 0.5rem;
+  }
+  .score-table-box {
+    max-width: 100%;
+  }
+}
