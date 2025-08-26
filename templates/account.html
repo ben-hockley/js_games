@@ -68,6 +68,55 @@
             </div>
         </div>
     </div>
+    <!-- 2048 Leaderboards -->
+    <div class="stats-flex-container mt-5">
+        <div class="stats-box">
+            <div class="d-flex flex-row flex-wrap justify-content-center" style="gap:2rem;">
+                <div class="score-table-box">
+                    <h4 class="text-center">Top 5 2048 Scores (All Users)</h4>
+                    <table class="table table-striped table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Username</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in top_2048_scores %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ entry.username }}</td>
+                                <td>{{ entry.score }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="score-table-box">
+                    <h4 class="text-center">Your Top 5 2048 Scores</h4>
+                    <table class="table table-striped table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Score</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in user_2048_scores %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ entry.score }}</td>
+                                <td>{{ entry.played_at.strftime('%Y-%m-%d %H:%M') if entry.played_at else '' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const scoreFreq = {{ score_freq | tojson }};

@@ -1,12 +1,16 @@
+
 const size = 4;
 let board = [];
 let cells = [];
+let score = 0;
 
 function initBoard() {
     board = Array(size * size).fill(0);
+    score = 0;
     addRandomTile();
     addRandomTile();
     updateBoard();
+    updateScore();
 }
 
 function addRandomTile() {
@@ -25,6 +29,14 @@ function updateBoard() {
         cells[i].style.background = getTileColor(board[i]);
         cells[i].style.color = board[i] > 4 ? "#f9f6f2" : "#776e65";
     }
+    updateScore();
+}
+
+function updateScore() {
+    // Score is the sum of all merged tiles (standard 2048 scoring)
+    // We'll keep a running total in the move logic
+    const scoreElem = document.getElementById("score-value");
+    if (scoreElem) scoreElem.textContent = score;
 }
 
 function getTileColor(val) {
@@ -65,6 +77,7 @@ function move(dir) {
                 !merged[next] && !merged[curr]
             ) {
                 board[next] *= 2;
+                score += board[next]; // Add merged value to score
                 board[curr] = 0;
                 merged[next] = true;
                 moved = true;
@@ -105,7 +118,27 @@ function move(dir) {
         addRandomTile();
         updateBoard();
         if (isGameOver()) {
-            setTimeout(() => alert("Game Over!"), 100);
+            setTimeout(() => {
+                alert("Game Over!");
+                // Send POST request to /2048-scores with the score
+                fetch('/2048-score', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ score: score })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to save score');
+                    }
+                    // Optionally handle success
+                })
+                .catch(error => {
+                    // Optionally handle error
+                    console.error(error);
+                });
+            }, 100);
         }
     }
 }

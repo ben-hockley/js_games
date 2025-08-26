@@ -6,8 +6,8 @@ from fastapi.staticfiles import StaticFiles
 # Import database setup
 from database import Base, engine
 from database import insert_user, get_user_by_username, verify_password, User
-from database import insert_wordle_score, insert_snake_score
-from database import SessionLocal, WordleScore
+from database import insert_wordle_score, insert_snake_score, insert_2048_score
+from database import SessionLocal, WordleScore, get_top_2048_scores, get_user_top_2048_scores
 from sqlalchemy.orm.exc import MultipleResultsFound
 from sqlalchemy import or_
 from starlette.middleware.sessions import SessionMiddleware
@@ -74,9 +74,28 @@ async def play_sudoku(request: Request):
     return templates.TemplateResponse(request, "play/sudoku.html")
 
 # 2048
+from database import get_top_2048_scores
+
 @app.get("/play/2048")
 async def play_2048(request: Request):
-    return templates.TemplateResponse(request, "play/2048.html")
+    leaderboard = get_top_2048_scores()
+    return templates.TemplateResponse(request, "play/2048.html", {"request": request, "leaderboard": leaderboard})
+
+@app.post("/2048-score")
+async def save_2048_score(request: Request):
+    user = request.session.get("user")
+    if not user:
+        return JSONResponse({"message": "Sign in to save your scores"}, status_code=401)
+    data = await request.json()
+    score = data.get("score")
+    if score is None:
+        return JSONResponse({"message": "Invalid score"}, status_code=400)
+    # Get user_id from DB
+    db_user = get_user_by_username(user["username"])
+    if db_user:
+        insert_2048_score(user_id=db_user.id, score=score)
+        return JSONResponse({"message": "Score saved!"})
+    return JSONResponse({"message": "User not found"}, status_code=404)
 
 # Minesweeper
 @app.get("/play/minesweeper")
@@ -138,6 +157,8 @@ async def account(request: Request):
     score_freq["0"] = 0  # 0 for losses
     top_snake_scores = []
     user_snake_scores = []
+    top_2048_scores = []
+    user_2048_scores = []
     if db_user:
         session = SessionLocal()
         try:
@@ -168,6 +189,9 @@ async def account(request: Request):
             user_snake_scores = [{"score": score, "played_at": played_at} for score, played_at in user_results]
         finally:
             session.close()
+        # 2048 leaderboards (all users and user)
+        top_2048_scores = get_top_2048_scores()
+        user_2048_scores = get_user_top_2048_scores(db_user.id)
     return templates.TemplateResponse(
         "account.html",
         {
@@ -176,6 +200,8 @@ async def account(request: Request):
             "score_freq": score_freq,
             "top_snake_scores": top_snake_scores,
             "user_snake_scores": user_snake_scores,
+            "top_2048_scores": top_2048_scores,
+            "user_2048_scores": user_2048_scores,
         },
     )
 

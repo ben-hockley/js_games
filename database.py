@@ -1,3 +1,16 @@
+def get_user_top_2048_scores(user_id, limit=5):
+	session = SessionLocal()
+	try:
+		results = (
+			session.query(Score2048.score, Score2048.played_at)
+			.filter(Score2048.user_id == user_id)
+			.order_by(Score2048.score.desc(), Score2048.played_at.asc())
+			.limit(limit)
+			.all()
+		)
+		return [{"score": score, "played_at": played_at} for score, played_at in results]
+	finally:
+		session.close()
 # Password hashing utilities
 from passlib.context import CryptContext
 
@@ -58,6 +71,15 @@ class SnakeScore(Base):
 
 	user = relationship("User", backref="snake_scores")
 
+# 2048Score model
+class Score2048(Base):
+	__tablename__ = "2048_scores"
+	id = Column(Integer, primary_key=True, index=True)
+	user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+	score = Column(Integer, nullable=False)
+	played_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+	user = relationship("User", backref="2048_scores")
 
 # Method to insert a new user
 def insert_user(username: str, password: str, email: str):
@@ -109,7 +131,23 @@ def insert_snake_score(user_id: int, score: int, played_at=None):
 	finally:
 		session.close()
 
-		
+# Method to insert a 2048 Score.
+def insert_2048_score(user_id: int, score: int, played_at=None):
+	session = SessionLocal()
+	try:
+		new_score = Score2048(user_id=user_id, score=score)
+		if played_at is not None:
+			new_score.played_at = played_at
+		session.add(new_score)
+		session.commit()
+		session.refresh(new_score)
+		return new_score
+	except Exception as e:
+		session.rollback()
+		raise e
+	finally:
+		session.close()
+
 # Method to get a user by username
 def get_user_by_username(username: str):
 	session = SessionLocal()
@@ -118,3 +156,19 @@ def get_user_by_username(username: str):
 		return user
 	finally:
 		session.close()
+
+from sqlalchemy.orm import joinedload
+
+def get_top_2048_scores(limit=5):
+    session = SessionLocal()
+    try:
+        results = (
+            session.query(Score2048.score, User.username)
+            .join(User, Score2048.user_id == User.id)
+            .order_by(Score2048.score.desc(), Score2048.played_at.asc())
+            .limit(limit)
+            .all()
+        )
+        return [{"score": score, "username": username} for score, username in results]
+    finally:
+        session.close()

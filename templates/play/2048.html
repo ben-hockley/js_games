@@ -10,13 +10,36 @@
 
 {% block content %}
     <h1>2048</h1>
-    <div class="container d-flex justify-content-center align-items-center flex-column">
-        <div class="grid-container mb-3">
-            {% for i in range(16) %}
-                <div class="grid-cell"></div>
-            {% endfor %}
+    <div class="container d-flex justify-content-center align-items-center flex-row" style="gap: 2.5rem; min-height: 80vh;">
+        <!-- Game Board and Score -->
+        <div class="d-flex flex-column align-items-center">
+            <div class="d-flex justify-content-center align-items-center mb-3" style="gap: 2rem;">
+                <div class="grid-container">
+                    {% for i in range(16) %}
+                        <div class="grid-cell"></div>
+                    {% endfor %}
+                </div>
+                <div id="score-box" class="d-flex flex-column align-items-center justify-content-center ms-3" style="min-width:120px;">
+                    <div class="score-label" style="font-weight:bold; font-size:1.2rem;">Score</div>
+                    <div id="score-value" style="font-size:2rem; color:#f67c5f;">0</div>
+                </div>
+            </div>
+            <a href="/play/2048" class="btn btn-primary mt-2">Reset</a>
         </div>
-        <a href="/play/2048" class="btn btn-primary mt-2">Reset</a>
+        <!-- Leaderboard -->
+        <div id="leaderboard" class="card shadow-sm p-3" style="min-width:220px; max-width:260px;">
+            <h5 class="mb-3 text-center" style="font-weight:bold;">Leaderboard</h5>
+            <ol class="list-group list-group-numbered">
+                {% for entry in leaderboard %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ entry.username }}</span>
+                        <span class="badge bg-primary rounded-pill">{{ entry.score }}</span>
+                    </li>
+                {% else %}
+                    <li class="list-group-item">No scores yet.</li>
+                {% endfor %}
+            </ol>
+        </div>
     </div>
 {% endblock %}
 
