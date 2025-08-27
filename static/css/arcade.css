@@ -58,8 +58,11 @@
   color: #fff200 !important;
   border: 2px solid #00fff7 !important;
 }
+.arcade-style .stats-box{
+  color: #1a0033 !important;
+}
 .arcade-style h2, .arcade-style h4, .arcade-style #words-list, .arcade-style .progress-bar {
-  color: #fff200 !important;
+  color: #00fff7 !important;
   text-shadow: 0 0 4px #00fff7, 0 0 8px #ff00c8;
 }
 .arcade-style .progress {
