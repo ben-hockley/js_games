@@ -1,1 +1,8 @@
 .venv
+.env
+config.py
+# pycache
+__pycache__/
+.pytest_cache/
+
+# config.py
