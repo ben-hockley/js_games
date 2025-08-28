@@ -4,7 +4,7 @@
 {% endblock %}
 {% block title %}Account Details{% endblock %}
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-5 text-center">
     <h2>Account Details</h2>
     <p><strong>Username:</strong> {{ user.username }}</p>
     <p><strong>Email:</strong> {{ user.email }}</p>
@@ -70,8 +70,9 @@
         </div>
     </div>
     <!-- 2048 Leaderboards -->
-    <div class="stats-flex-container mt-5">
+    <div class="stats-flex-container mt-5 text-center">
         <div class="stats-box">
+            <h2>2048</h2>
             <div class="d-flex flex-row flex-wrap justify-content-center" style="gap:2rem;">
                 <div class="score-table-box">
                     <h4 class="text-center">Top 5 2048 Scores (All Users)</h4>
