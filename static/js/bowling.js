@@ -1,8 +1,12 @@
 // Bowling Alley Game Logic
 // Draws a horizontal alley, ball, arrow, and pins. Handles aiming and ball movement.
 
-var currentFrame = 0;
+var currentFrame = 0; // 0 indexed (9 is frame 10)
 var currentTurn = 0;
+
+var roll1 = 0;
+var roll2 = 0;
+var roll3 = 0; // Only used on the last turn of the game
 
 const canvas = document.getElementById('bowling-canvas');
 const ctx = canvas.getContext('2d');
@@ -41,11 +45,11 @@ let ball = {
 };
 
 // Arrow state
-let arrowAngle = 0; // 0deg (up/12 o'clock)
+let arrowAngle = Math.PI / 6 * 2.5; // Start at 2.5 o'clock
 let arrowDir = 1; // 1 or -1
-const arrowMin = 0; // 0deg (12 o'clock)
-const arrowMax = Math.PI; // 180deg (6 o'clock)
-const arrowSpeed = 1.2; // radians/sec
+const arrowMin = Math.PI / 6 * 2.5; // 2.5 o'clock
+const arrowMax = Math.PI / 6 * 3.5; // 3.5 o'clock
+const arrowSpeed = 0.3; // radians/sec
 
 // Pin positions (standard triangle, front pin centered, fills width)
 function getPinPositions() {
@@ -351,16 +355,49 @@ function drawGame(ts) {
             // Update the scorecard
             // Wait 5 seconds, then reset
             
-            updateScorecard(currentFrame, [noOfPinsDown]);
             console.log(currentTurn)
-            if (currentTurn == 1) {
-                currentFrame++;
-                currentTurn = 0
-                setTimeout(resetBallAndPins,5000)
+            
+            if (currentFrame == 9){
+                // logic for final frame
+                if (currentTurn == 0) {
+                    roll1 = noOfPinsDown;
+                    setTimeout(resetBall, 5000);
+                    currentTurn += 1
+                } else if (currentTurn == 1){
+                    roll2 = noOfPinsDown - roll1;
+                    setTimeout(resetBall, 5000);
+                    currentTurn += 1
+                } else {
+                    // lastTurn of the game
+                    roll3 = noOfPinsDown - roll2 - roll1
+                    updateScorecard(currentFrame, [roll1, roll2, roll3])
+                    window.alert("End of Game!")
+                }
             } else {
-                // Wait 5 seconds, then reset
+            if (currentTurn == 1) {
+                    // if the second roll of the frame
+                    roll2 = noOfPinsDown - roll1
+                    updateScorecard(currentFrame, [roll1, roll2]);
+                    currentFrame++;
+                    currentTurn = 0
+                    roll1 = 0
+                    roll2 = 0
+                    setTimeout(resetBallAndPins,5000)
+                } else {
+                // If the first roll of the frame
+                roll1 = noOfPinsDown;
+                if (noOfPinsDown == 10){
+                    updateScorecard(currentFrame, [noOfPinsDown, 0]);
+                    currentFrame++;
+                    currentTurn = 0;
+                    roll1 = 0;
+                    roll2 = 0;
+                    setTimeout(resetBallAndPins, 5000)
+                } else {
                 setTimeout(resetBall, 5000);
                 currentTurn += 1;
+                }
+                }
             }
         }
     }
