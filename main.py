@@ -20,6 +20,7 @@ from routers.games.snake import router as snake_router
 from routers.games.minesweeper import router as minesweeper_router
 from routers.games.connect_4 import router as connect_4_router
 from routers.games._2048 import router as _2048_router
+from routers.games.bowling import router as bowling_router
 
 
 from starlette.middleware.sessions import SessionMiddleware
@@ -65,6 +66,7 @@ app.include_router(snake_router)
 app.include_router(minesweeper_router)
 app.include_router(connect_4_router)
 app.include_router(_2048_router)
+app.include_router(bowling_router)
 
 #--------------------------------------------------------------------------------------------------
 if __name__ == "__main__":

@@ -1,0 +1,24 @@
+/* Bowling Game Canvas Styles */
+.bowling-game-container {
+	width: 100vw;
+	max-width: 100vw;
+	overflow-x: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #e59c65;
+	padding: 0;
+	margin: 0;
+}
+
+#bowling-canvas {
+	display: block;
+	width: 100vw;
+	max-width: 100vw;
+	height: 240px;
+	background: #e59c65;
+	border: 5px solid #333;
+	border-radius: 10px;
+	box-shadow: 0 2px 16px #0004;
+	margin: 0 auto;
+}

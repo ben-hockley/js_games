@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Bowling{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/bowling.css">
+{% endblock %}
+
+{% block content %}
+<div class="bowling-game-container">
+    <canvas id="bowling-canvas"></canvas>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/js/bowling.js"></script>
+{% endblock %}
