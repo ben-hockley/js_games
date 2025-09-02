@@ -65,7 +65,9 @@ function getPinPositions() {
         let rowHeight = (pinsInRow - 1) * spacing;
         for (let i = 0; i < pinsInRow; i++) {
             let y = centerY - rowHeight / 2 + i * spacing;
-            pins.push({ x, y, knocked: false });
+            pins.push({ x, y, knocked: false, downed: false });
+            // Knocked : Whether the pin was knocked over in this frame.
+            // Downed : Whether the pin was knocked down by this roll (for calculating pins knocked over by domino effect)
         }
     }
     return pins;
@@ -226,7 +228,8 @@ function drawGame(ts) {
                 // Knock over this pin by ball
                 console.log("Knocked Over Pin:", i);
                 console.log("Distance to Pin:", dist);
-                pins[i].knocked = true;
+                pins[i].knocked = true
+                pins[i].downed = true; // Mark as downed by this roll
                 // Ball trajectory is NOT affected
             }
         }
@@ -251,103 +254,118 @@ function drawGame(ts) {
                 // Knock check row 2
 
                 // PIN 0
-                if (pins[0].knocked && !pins[1].knocked) {
+                if (pins[0].downed && !pins[1].knocked) {
                     // If pin 0 knocked, 50% chance to knock 1
                     if (Math.random() < 0.5) {
                         pins[1].knocked = true;
+                        pins[1].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 1, by falling pin 0");
                     }
                 }
-                if (pins[0].knocked && !pins[2].knocked) {
+                if (pins[0].downed && !pins[2].knocked) {
                     // If pin 0 knocked, 50% chance to knock 2
                     if (Math.random() < 0.5) {
                         pins[2].knocked = true;
+                        pins[2].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 2, by falling pin 0");
                     }
                 }
                 // Knock check row 3
 
                 // PIN 1
-                if (pins[1].knocked && !pins[3].knocked) {
+                if (pins[1].downed && !pins[3].knocked) {
                     // If pin 1 knocked, 50% chance to knock 3
                     if (Math.random() < 0.5) {
                         pins[3].knocked = true;
+                        pins[3].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 3, by falling pin 1");
                     }
                 }
-                if (pins[1].knocked && !pins[4].knocked) {
+                if (pins[1].downed && !pins[4].knocked) {
                     // If pin 1 knocked, 50% chance to knock 4
                     if (Math.random() < 0.5) {
                         pins[4].knocked = true;
+                        pins[4].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 4, by falling pin 1");
                     }
                 }
 
                 // PIN 2
-                if (pins[2].knocked && !pins[4].knocked) {
+                if (pins[2].downed && !pins[4].knocked) {
                     // If pin 2 knocked, 50% chance to knock 4
                     if (Math.random() < 0.5) {
                         pins[4].knocked = true;
+                        pins[4].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 4, by falling pin 2");
                     }
                 }
-                if (pins[2].knocked && !pins[5].knocked) {
+                if (pins[2].downed && !pins[5].knocked) {
                     // If pin 2 knocked, 50% chance to knock 5
                     if (Math.random() < 0.5) {
                         pins[5].knocked = true;
+                        pins[5].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 5, by falling pin 2");
                     }
                 }
                 // Knock check row 4
 
                 // PIN 3
-                if (pins[3].knocked && !pins[6].knocked) {
+                if (pins[3].downed && !pins[6].knocked) {
                     // If pin 3 knocked, 50% chance to knock 6
                     if (Math.random() < 0.5) {
                         pins[6].knocked = true;
+                        pins[6].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 6, by falling pin 3");
                     }
                 }
-                if (pins[3].knocked && !pins[7].knocked) {
+                if (pins[3].downed && !pins[7].knocked) {
                     // If pin 3 knocked, 50% chance to knock 7
                     if (Math.random() < 0.5) {
                         pins[7].knocked = true;
+                        pins[7].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 7, by falling pin 3");
                     }
                 }
 
                 // PIN 4
-                if (pins[4].knocked && !pins[7].knocked) {
+                if (pins[4].downed && !pins[7].knocked) {
                     // If pin 4 knocked, 50% chance to knock 7
                     if (Math.random() < 0.5) {
                         pins[7].knocked = true;
+                        pins[7].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 8, by falling pin 4");
                     }
                 }
-                if (pins[4].knocked && !pins[8].knocked) {
+                if (pins[4].downed && !pins[8].knocked) {
                     // If pin 4 knocked, 50% chance to knock 8
                     if (Math.random() < 0.5) {
                         pins[8].knocked = true;
+                        pins[8].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 8, by falling pin 4");
                     }
                 }
 
                 // PIN 5
-                if (pins[5].knocked && !pins[8].knocked) {
+                if (pins[5].downed && !pins[8].knocked) {
                     // If pin 5 knocked, 50% chance to knock 8
                     if (Math.random() < 0.5) {
                         pins[8].knocked = true;
+                        pins[8].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 8, by falling pin 5");
                     }
                 }
-                if (pins[5].knocked && !pins[9].knocked) {
+                if (pins[5].downed && !pins[9].knocked) {
                     // If pin 5 knocked, 50% chance to knock 9
                     if (Math.random() < 0.5) {
                         pins[9].knocked = true;
+                        pins[9].downed = true; // mark as downed on this roll.
                         console.log("Knocked Over Pin: 9, by falling pin 5");
                     }
                 }
                 drawGame.knockChecked = true;
+                // Since domino effect checks have been completed :
+                // reset all pins downed status to false (for new roll)
+                pins.forEach(pin => pin.downed = false);
             }
             // After Knock checks complete, check how many pins have fallen.
             noOfPinsDown = pins.filter(pin => pin.knocked).length;
@@ -371,7 +389,10 @@ function drawGame(ts) {
                     // lastTurn of the game
                     roll3 = noOfPinsDown - roll2 - roll1
                     updateScorecard(currentFrame, [roll1, roll2, roll3])
-                    window.alert("End of Game!")
+                    // Game Over
+                    let finalScore = calculateScore(currentFrame)
+                    window.alert("End of Game! Final Score : " + finalScore)
+                    saveBowlingScore(finalScore);
                 }
             } else {
             if (currentTurn == 1) {
@@ -497,3 +518,25 @@ window.addEventListener('resize', () => {
     ball.y = canvas.height / 2;
     pins = getPinPositions();
 });
+
+// Call this when the game ends and score should be saved
+function saveBowlingScore(score) {
+    fetch('/bowling-score', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ score })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+        }
+    })
+    .catch(err => {
+        alert('Error saving score');
+    });
+}
+
+// Example usage: call saveBowlingScore(finalScore) at the end of the game

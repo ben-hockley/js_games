@@ -56,6 +56,7 @@ class SnakeScore(Base):
 
 # 2048Score model
 class Score2048(Base):
+	# class name rearranged from convention as python doesnt allow variable names starting with a number
 	__tablename__ = "2048_scores"
 	id = Column(Integer, primary_key=True, index=True)
 	user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
@@ -63,6 +64,16 @@ class Score2048(Base):
 	played_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
 	user = relationship("User", backref="2048_scores")
+
+# BowlingScore model
+class BowlingScore(Base):
+	__tablename__ = "bowling_scores"
+	id = Column(Integer, primary_key=True, index=True)
+	user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+	score = Column(Integer, nullable=False)
+	played_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+	user = relationship("User", backref="bowling_scores")
 
 # Method to insert a new user
 def insert_user(username: str, password: str, email: str):
@@ -131,6 +142,23 @@ def insert_2048_score(user_id: int, score: int, played_at=None):
 	finally:
 		session.close()
 
+# Method to insert a bowling Score.
+def insert_bowling_score(user_id: int, score: int, played_at=None):
+	session = SessionLocal()
+	try:
+		new_score = BowlingScore(user_id=user_id, score=score)
+		if played_at is not None:
+			new_score.played_at = played_at
+		session.add(new_score)
+		session.commit()
+		session.refresh(new_score)
+		return new_score
+	except Exception as e:
+		session.rollback()
+		raise e
+	finally:
+		session.close()
+
 # Method to get a user by username
 def get_user_by_username(username: str):
 	session = SessionLocal()
@@ -156,6 +184,7 @@ def get_top_2048_scores(limit=5):
     finally:
         session.close()
 
+# 2048
 # get the user's high scores on 2048
 def get_user_top_2048_scores(user_id, limit=5):
 	session = SessionLocal()
@@ -183,6 +212,7 @@ def get_user_wordle_score_distribution(user_id):
 	finally:
 		session.close()
 
+# Snake
 def get_top_snake_scores(limit=5):
 	session = SessionLocal()
 	try:
@@ -204,6 +234,36 @@ def get_user_top_snake_scores(user_id, limit=5):
 			session.query(SnakeScore.score, SnakeScore.played_at)
 			.filter(SnakeScore.user_id == user_id)
 			.order_by(SnakeScore.score.desc(), SnakeScore.played_at.asc())
+			.limit(limit)
+			.all()
+		)
+		return [{"score": score, "played_at": played_at} for score, played_at in results]
+	finally:
+		session.close()
+
+# bowling
+
+def get_top_bowling_scores(limit=5):
+	session = SessionLocal()
+	try:
+		results = (
+			session.query(BowlingScore.score, User.username)
+			.join(User, BowlingScore.user_id == User.id)
+			.order_by(BowlingScore.score.desc(), BowlingScore.played_at.asc())
+			.limit(limit)
+			.all()
+		)
+		return [{"score": score, "username": username} for score, username in results]
+	finally:
+		session.close()
+
+def get_user_top_bowling_scores(user_id, limit=5):
+	session = SessionLocal()
+	try:
+		results = (
+			session.query(BowlingScore.score, BowlingScore.played_at)
+			.filter(BowlingScore.user_id == user_id)
+			.order_by(BowlingScore.score.desc(), BowlingScore.played_at.asc())
 			.limit(limit)
 			.all()
 		)
