@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import JSONResponse
-from database import get_top_2048_scores, get_user_by_username, insert_2048_score
+
+from services.service_2048 import insert_2048_score, get_top_2048_scores
+from services.user_service import get_user_by_username
 
 templates = Jinja2Templates(directory="templates")
 

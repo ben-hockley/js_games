@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
-from database import get_user_by_username, verify_password
+from services.user_service import get_user_by_username, verify_password
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")

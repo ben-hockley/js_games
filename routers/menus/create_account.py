@@ -1,7 +1,11 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
-from database import insert_user, get_user_by_username, User, SessionLocal
+from database import SessionLocal
+
+from models.models_user import User
+from services.user_service import insert_user
+
 from sqlalchemy import or_
 import re
 

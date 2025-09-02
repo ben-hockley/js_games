@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
-from database import (get_user_by_username, get_user_wordle_score_distribution,
-                        get_top_snake_scores, get_user_top_snake_scores,
-                        get_top_2048_scores, get_user_top_2048_scores,
-                        get_top_bowling_scores, get_user_top_bowling_scores)
+
+from services.user_service import get_user_by_username
+from services.wordle_service import get_user_wordle_score_distribution
+from services.snake_service import get_top_snake_scores, get_user_top_snake_scores
+from services.service_2048 import get_top_2048_scores, get_user_top_2048_scores
+from services.bowling_service import get_top_bowling_scores, get_user_top_bowling_scores
 
 templates = Jinja2Templates(directory="templates")
 

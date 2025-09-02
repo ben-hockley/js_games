@@ -1,12 +1,9 @@
 from fastapi import APIRouter, Request, Depends
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import JSONResponse
-from database import (
-    get_top_bowling_scores,
-    get_user_top_bowling_scores,
-    get_user_by_username,
-    insert_bowling_score,
-)
+
+from services.bowling_service import insert_bowling_score, get_top_bowling_scores, get_user_top_bowling_scores
+from services.user_service import get_user_by_username
 
 templates = Jinja2Templates(directory="templates")
 router = APIRouter()

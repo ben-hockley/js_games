@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
-from database import get_user_by_username, insert_wordle_score
+from services.user_service import get_user_by_username
+from services.wordle_service import insert_wordle_score
 
 templates = Jinja2Templates(directory="templates")
 

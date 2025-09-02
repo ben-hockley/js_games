@@ -1,28 +1,19 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 
-from database import SessionLocal, SnakeScore, User, get_user_by_username, insert_snake_score
+from database import SessionLocal
 from fastapi.responses import JSONResponse
 
 templates = Jinja2Templates(directory="templates")
 
 router = APIRouter()
 
+from services.snake_service import insert_snake_score, get_top_snake_scores
+from services.user_service import get_user_by_username
+
 @router.get("/play/snake")
 async def play_snake(request: Request):
-    session = SessionLocal()
-    leaderboard = []
-    try:
-        results = (
-            session.query(SnakeScore.score, User.username)
-            .join(User, SnakeScore.user_id == User.id)
-            .order_by(SnakeScore.score.desc(), SnakeScore.played_at.asc())
-            .limit(5)
-            .all()
-        )
-        leaderboard = [{"score": score, "username": username} for score, username in results]
-    finally:
-        session.close()
+    leaderboard = get_top_snake_scores()
     return templates.TemplateResponse("play/snake.html", {"request": request, "leaderboard": leaderboard})
 
 @router.post("/snake-score")
