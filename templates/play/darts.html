@@ -2,15 +2,33 @@
 
 {% block styles %}
     <link rel="stylesheet" href="/static/css/darts.css">
+    <style>
+    @media (max-width: 700px) {
+        #score-counter, #score-list {
+            position: static !important;
+            display: block;
+            margin: 16px auto 0 auto;
+            left: 0;
+            right: 0;
+            top: auto;
+            box-shadow: 0 2px 8px #aaa;
+        }
+        #score-list {
+            margin-top: 8px;
+        }
+    }
+    </style>
 {% endblock %}
 
 {% block title %}Darts{% endblock %}
 
 {% block content %}
+<div id="score-counter" style="position: absolute; top: 100px; right: 40px; font-size: 2em; font-weight: bold; color: #4169e1; background: #fff; padding: 10px 24px; border-radius: 10px; box-shadow: 0 2px 8px #aaa; z-index: 10;">Score: 501</div>
+<div id="score-list" style="position: absolute; top: 200px; right: 40px; min-width: 220px; font-size: 1.2em; color: #222; background: #f8f8ff; padding: 12px 18px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; z-index: 9;"></div>
 <h1>Darts</h1>
 <div class="darts-container">
     <button id="start-game">Start Game</button>
-    <button id="next-dart">Next Dart</button>
+    <button id="next-turn">Next Turn</button>
     <canvas id="dartboard" width="500" height="500"></canvas>
 </div>
 {% endblock %}

@@ -2,7 +2,7 @@
 const canvas = document.getElementById('dartboard');
 const ctx = canvas.getContext('2d');
 const startBtn = document.getElementById('start-game');
-const nextDartBtn = document.getElementById('next-dart');
+const nextTurnBtn = document.getElementById('next-turn');
 
 const boardCenter = { x: canvas.width / 2, y: canvas.height / 2 };
 const boardRadius = 200;
@@ -13,6 +13,15 @@ let crosshair = { x: boardCenter.x, y: boardCenter.y };
 let crosshairDir = 1;
 let animationFrame;
 let darts = [];
+
+let currentTurn = 1;
+let turnScore = 0;
+let totalScore = 501;
+let scoreLog = [];
+let dartsThrown = 0;
+
+const scoreCounter = document.getElementById('score-counter');
+const scoreList = document.getElementById('score-list');
 
 // Dartboard segment values (clockwise from top)
 const segmentValues = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
@@ -35,6 +44,7 @@ function drawBoard() {
 	}
 	// Draw double ring
 	for (let i = 0; i < 20; i++) {
+		let dartScores = [];
 		const angle1 = ((i - 0.5) * Math.PI * 2) / 20;
 		const angle2 = ((i + 0.5) * Math.PI * 2) / 20;
 		ctx.beginPath();
@@ -159,6 +169,31 @@ function getScore(x, y) {
 	return 0;
 }
 
+// gets the score notation (e.g. T20, D19, 18, BULL, 25)
+function getDartNotation(x, y) {
+	// Convert to board coordinates
+	const dx = x - boardCenter.x;
+	const dy = y - boardCenter.y;
+	const r = Math.sqrt(dx * dx + dy * dy);
+	const angle = Math.atan2(dy, dx);
+	let theta = angle < -Math.PI / 2 ? angle + 2 * Math.PI : angle;
+	// Find segment
+	let seg = Math.floor(((theta + Math.PI / 2) / (2 * Math.PI)) * 20 + 0.5) % 20;
+	if (seg < 0) seg += 20;
+	const value = segmentValues[seg];
+	// Bullseye
+	if (r <= 20) return "BULL";
+	if (r <= 40) return "25";
+	// Double ring
+	if (r >= boardRadius - 20 && r <= boardRadius) return "D" + value;
+	// Triple ring
+	if (r >= boardRadius - 80 && r <= boardRadius - 60) return "T" + value;
+	// Single
+	if (r < boardRadius) return value.toString();
+	return "0";
+}
+
+// Crosshair moves left/right to set horizontal position.
 function animateHorizontal() {
 	drawBoard();
 	drawCrosshair();
@@ -169,6 +204,7 @@ function animateHorizontal() {
 	animationFrame = requestAnimationFrame(animateHorizontal);
 }
 
+// Crosshair moves up/down to set vertical position.
 function animateVertical() {
 	drawBoard();
 	drawCrosshair();
@@ -179,6 +215,29 @@ function animateVertical() {
 	animationFrame = requestAnimationFrame(animateVertical);
 }
 
+function updateScoreCounter() {
+	scoreCounter.textContent = 'Score: ' + totalScore;
+}
+
+function updateScoreList() {
+	let html = '<strong>Score Log:</strong><br>';
+	scoreLog.forEach((turn, index) => {
+		html += `<strong>Turn ${index + 1}:</strong> ${turn.join(', ')}<br>`;
+	});
+	html += `<br><strong>Darts Thrown:</strong> ` + dartsThrown;
+	average = (dartsThrown === 0) ? 0 : (501 - totalScore) / dartsThrown * 3;
+	html += `(Avg: ` + average.toFixed(2) + `)`;
+	scoreList.innerHTML = html;
+}
+
+function updateStartButtonText() {
+    if (gameState === 'idle' || gameState === 'done') {
+        startBtn.textContent = 'Start Game';
+    } else {
+        startBtn.textContent = 'Restart Game';
+    }
+}
+
 function startGame() {
 	gameState = 'horizontal';
 	crosshair.x = boardCenter.x;
@@ -186,8 +245,10 @@ function startGame() {
 	crosshairDir = 1;
 	drawBoard();
 	animationFrame = requestAnimationFrame(animateHorizontal);
+	updateStartButtonText();
 }
 
+// Call this function after every game state change:
 canvas.onclick = function (e) {
 	if (gameState === 'horizontal') {
 		// Stop horizontal, start vertical from current x
@@ -206,8 +267,82 @@ canvas.onclick = function (e) {
 		drawBoard();
 		// Calculate and log score
 		const score = getScore(crosshair.x, crosshair.y);
+		const dartNotation = getDartNotation(crosshair.x, crosshair.y)
+		console.log(dartNotation)
 		console.log('Dart Score:', score);
-		alert('Dart Score: ' + score);
+		// Save score before turn for bust logic
+		if (currentTurn === 1) {
+			window._scoreBeforeTurn = totalScore;
+		}
+		// Update turn score and total score
+		turnScore += score;
+		totalScore -= score;
+		dartsThrown ++;
+		// Bust logic (If score goes below 0 or is 1, you can't finish on a double from 1.)
+		if (totalScore < 0 || totalScore === 1) {
+			scoreLog[scoreLog.length - 1].push('BUST');
+			totalScore = window._scoreBeforeTurn;
+			updateScoreCounter();
+			updateScoreList();
+			darts = [];
+			setTimeout(() => {
+				drawBoard();
+			}, 3000);
+			currentTurn = 1;
+			turnScore = 0;
+			return;
+		}
+
+		// Win logic: check if score is exactly 0 and last dart is a double
+		let isDouble = false;
+		const dx = crosshair.x - boardCenter.x;
+		const dy = crosshair.y - boardCenter.y;
+		const r = Math.sqrt(dx * dx + dy * dy);
+		if (r >= boardRadius - 20 && r <= boardRadius) isDouble = true;
+
+		if (totalScore === 0) {
+			if (isDouble) {
+				scoreLog[scoreLog.length - 1].push(dartNotation);
+				updateScoreList();
+				updateScoreCounter();
+				setTimeout(() => {
+					alert('Game Over in ' + dartsThrown + ' darts!');
+				}, 100);
+				gameState = 'idle';
+				updateStartButtonText();
+				return;
+			} else {
+				// Bust Logic: must finish on a double.
+				scoreLog[scoreLog.length - 1].push('BUST');
+				totalScore = window._scoreBeforeTurn;
+				updateScoreCounter();
+				updateScoreList();
+				darts = [];
+				setTimeout(() => {
+					drawBoard();
+				}, 3000);
+				currentTurn = 1;
+				turnScore = 0;
+				return;
+			}
+		}
+
+		scoreLog[scoreLog.length - 1].push(dartNotation); // Log this dart's score
+		updateScoreList();
+		updateScoreCounter();
+		// Check if turn is over
+		if (currentTurn === 3) {
+			console.log('Total Score for Turn:', turnScore);
+			darts = [];
+			setTimeout(() => {
+				drawBoard();
+			}, 3000);
+			currentTurn = 1;
+			turnScore = 0;
+		} else {
+			currentTurn++;
+			startGame();
+		}
 	}
 };
 
@@ -215,15 +350,23 @@ canvas.onclick = function (e) {
 startBtn.onclick = function () {
 	if (gameState === 'idle' || gameState === 'done') {
 		darts = [];
+		totalScore = 501;
+		scoreLog = [];
+		dartsThrown = 0;
+		updateScoreCounter();
+		updateScoreList();
+		scoreLog.push([]);
 		startGame();
 	}
 };
 
-nextDartBtn.onclick = function () {
+nextTurnBtn.onclick = function () {
 	if (gameState === 'done') {
+		scoreLog.push([]); // Start a new turn log
 		startGame();
 	}
 };
 
 // Initial draw
+updateScoreCounter();
 drawBoard();
