@@ -1,0 +1,30 @@
+.darts-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-top: 30px;
+}
+
+#dartboard {
+	display: block;
+	margin: 0 auto;
+	background: #222;
+	border-radius: 50%;
+	box-shadow: 0 0 20px #888;
+}
+
+#start-game {
+	margin-bottom: 20px;
+	padding: 10px 24px;
+	font-size: 1.2em;
+	background: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+#start-game:hover {
+	background: #0056b3;
+}

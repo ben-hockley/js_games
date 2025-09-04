@@ -15,6 +15,7 @@ from routers.games.minesweeper import router as minesweeper_router
 from routers.games.connect_4 import router as connect_4_router
 from routers.games._2048 import router as _2048_router
 from routers.games.bowling import router as bowling_router
+from routers.games.darts import router as darts_router
 # Import routers for menus
 from routers.menus.home import router as home_router
 from routers.menus.account import router as account_router
@@ -53,6 +54,7 @@ app.include_router(minesweeper_router)
 app.include_router(connect_4_router)
 app.include_router(_2048_router)
 app.include_router(bowling_router)
+app.include_router(darts_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/darts.css">
+{% endblock %}
+
+{% block title %}Darts{% endblock %}
+
+{% block content %}
+<h1>Darts</h1>
+<div class="darts-container">
+    <button id="start-game">Start Game</button>
+    <button id="next-dart">Next Dart</button>
+    <canvas id="dartboard" width="500" height="500"></canvas>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/darts.js"></script>
+{% endblock %}
